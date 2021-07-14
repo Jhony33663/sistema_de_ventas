@@ -4,22 +4,57 @@
  * and open the template in the editor.
  */
 package APP;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
 /**
  *
  * @author jonad
  */
 public class dar_de_alta_usuario extends javax.swing.JFrame {
+    Connection con = null;
+    public static Connection conn;
+    public static final String DRIVER = "com.mysql.jdbc.Driver";
+    public static final String USERNAME = "root";
+    public static final String PASSWORD = "";
+    public static final String URL = "jdbc:mysql://localhost:3306/sistemaventas";
+    PreparedStatement ps;
+    ResultSet rs;
+
+    /**
+     * Creates new form RegistroLibros
+     */
+    public static Connection getConnection() {
+        try {
+            Class.forName(DRIVER);
+            conn = (Connection) DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            JOptionPane.showMessageDialog(null, "Conexion Exitosa");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return conn;
+    }
 
     /**
      * Creates new form dar_de_alta_usuario
      */
+    
     public dar_de_alta_usuario() {
         initComponents();
         transpareciabotones();
         this.setLocationRelativeTo(null);
     }
 
+        public void limpiarcajas() {
+        txt_usuario.setText(null);
+        txt_password.setText(null);
+        txt_verificacion.setText(null);
+    }
+    
     public void transpareciabotones() {
         //btn_eviodatos
         btn_reg.setOpaque(false);
@@ -42,7 +77,7 @@ public class dar_de_alta_usuario extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         txt_password = new javax.swing.JPasswordField();
-        txt_veripsswd = new javax.swing.JPasswordField();
+        txt_verificacion = new javax.swing.JPasswordField();
         txt_usuario = new javax.swing.JTextField();
         btn_reg = new javax.swing.JButton();
         btn_volver = new javax.swing.JButton();
@@ -55,9 +90,10 @@ public class dar_de_alta_usuario extends javax.swing.JFrame {
         txt_password.setBorder(null);
         jPanel1.add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 330, 370, 40));
 
-        txt_veripsswd.setBorder(null);
-        jPanel1.add(txt_veripsswd, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 430, 370, 40));
+        txt_verificacion.setBorder(null);
+        jPanel1.add(txt_verificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 430, 370, 40));
 
+        txt_usuario.setBorder(null);
         txt_usuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_usuarioActionPerformed(evt);
@@ -108,8 +144,34 @@ public class dar_de_alta_usuario extends javax.swing.JFrame {
 
     private void btn_regActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_regActionPerformed
         // TODO add your handling code here:
-        
-        
+        if (txt_usuario.getText().length() > 0 && txt_password.getText().length() > 0 && txt_verificacion.getText().length() > 0) {
+        Connection conn = null;
+        try {
+            //conexion a bd
+            conn = getConnection();
+            //datos y transformo a valores correspondientes
+            //consuta a la tabla
+            ps = conn.prepareStatement("INSERT INTO `login`(`username`, `password`)" + "VALUES(?,?)");
+            ps.setString(1, txt_usuario.getText());
+            ps.setString(2, txt_password.getText());
+            //ejecute consulta y valores
+            //execute accion de incerscion 
+            //res envia msg
+            int res = ps.executeUpdate();
+            if (res > 0) {
+                JOptionPane.showMessageDialog(null, "Valores Almacenados");
+                limpiarcajas();
+            } else {
+                JOptionPane.showMessageDialog(null, "ERROR AL ALMACENAR LOS DATOS...");
+                limpiarcajas();
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        }else{ 
+             JOptionPane.showMessageDialog(rootPane,"NECESITA LLENAR LOS CAMPOS");
+         }             
     }//GEN-LAST:event_btn_regActionPerformed
 
     private void txt_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usuarioActionPerformed
@@ -158,6 +220,6 @@ public class dar_de_alta_usuario extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField txt_password;
     private javax.swing.JTextField txt_usuario;
-    private javax.swing.JPasswordField txt_veripsswd;
+    private javax.swing.JPasswordField txt_verificacion;
     // End of variables declaration//GEN-END:variables
 }
