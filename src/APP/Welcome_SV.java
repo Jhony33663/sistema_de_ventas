@@ -5,12 +5,20 @@
  */
 package APP;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
+
+
 /**
  *
  * @author estiv
  */
 public class Welcome_SV extends javax.swing.JFrame {
-
+    
+    private Timer t;
+    private ActionListener ac;
+    private int x = 0;
     /**
      * Creates new form Welcome_SV
      */
@@ -18,6 +26,17 @@ public class Welcome_SV extends javax.swing.JFrame {
         initComponents();
         transpareciabotones();
         this.setLocationRelativeTo(null);
+        ac = new ActionListener(){
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                x = x + 1;
+                jProgressBar1.setValue(x);
+            }
+            
+        };
+        t = new Timer (1, ac);
+        t.start();
     }
     
     //btn_transparente
@@ -38,6 +57,7 @@ public class Welcome_SV extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jProgressBar1 = new javax.swing.JProgressBar();
         btn_continuar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
@@ -45,13 +65,16 @@ public class Welcome_SV extends javax.swing.JFrame {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jProgressBar1.setStringPainted(true);
+        jPanel1.add(jProgressBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 470, 670, -1));
+
         btn_continuar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/General_2.png"))); // NOI18N
         btn_continuar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_continuarActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_continuar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 390, 150, 80));
+        jPanel1.add(btn_continuar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 380, 150, 80));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Desktop - 2.png"))); // NOI18N
         jLabel1.setName(""); // NOI18N
@@ -73,8 +96,8 @@ public class Welcome_SV extends javax.swing.JFrame {
 
     private void btn_continuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_continuarActionPerformed
         // TODO add your handling code here:
-        LogIn volver = new LogIn();
-        volver.setVisible(true);
+        SistemaVentasGeneral continuar = new SistemaVentasGeneral();
+        continuar.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btn_continuarActionPerformed
 
@@ -117,5 +140,6 @@ public class Welcome_SV extends javax.swing.JFrame {
     private javax.swing.JButton btn_continuar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JProgressBar jProgressBar1;
     // End of variables declaration//GEN-END:variables
 }

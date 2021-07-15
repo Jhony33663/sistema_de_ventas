@@ -121,7 +121,7 @@ public class LogIn extends javax.swing.JFrame {
                     this.setVisible(false);
                 }else{
                     JOptionPane.showMessageDialog(rootPane, "ACCESO DENEGADO");
-                    JOptionPane.showMessageDialog(rootPane, "DATOS DENEGADOS");
+                    JOptionPane.showMessageDialog(rootPane, "DATOS INCORRECTOS");
                 }
                 
                
@@ -130,8 +130,9 @@ public class LogIn extends javax.swing.JFrame {
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }
-        }
-        
+        }else{ 
+             JOptionPane.showMessageDialog(rootPane,"NECESITA LLENAR LOS CAMPOS");
+         }             
     }//GEN-LAST:event_btn_loginActionPerformed
 
     private void btn_registroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registroActionPerformed

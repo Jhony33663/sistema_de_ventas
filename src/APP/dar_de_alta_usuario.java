@@ -32,7 +32,7 @@ public class dar_de_alta_usuario extends javax.swing.JFrame {
         try {
             Class.forName(DRIVER);
             conn = (Connection) DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            JOptionPane.showMessageDialog(null, "Conexion Exitosa");
+            JOptionPane.showMessageDialog(null, "CONEXION EXITOSA");
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -107,7 +107,7 @@ public class dar_de_alta_usuario extends javax.swing.JFrame {
                 btn_regActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_reg, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 110, 140, 80));
+        jPanel1.add(btn_reg, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 130, 140, 80));
 
         btn_volver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/regresar.png"))); // NOI18N
         btn_volver.addActionListener(new java.awt.event.ActionListener() {
@@ -115,7 +115,7 @@ public class dar_de_alta_usuario extends javax.swing.JFrame {
                 btn_volverActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_volver, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 110, 150, 80));
+        jPanel1.add(btn_volver, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 130, 150, 80));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ventanareg.png"))); // NOI18N
         jLabel1.setName(""); // NOI18N
@@ -159,7 +159,7 @@ public class dar_de_alta_usuario extends javax.swing.JFrame {
             //res envia msg
             int res = ps.executeUpdate();
             if (res > 0) {
-                JOptionPane.showMessageDialog(null, "Valores Almacenados");
+                JOptionPane.showMessageDialog(null, "VALORES ALMACENADOS");
                 limpiarcajas();
             } else {
                 JOptionPane.showMessageDialog(null, "ERROR AL ALMACENAR LOS DATOS...");
