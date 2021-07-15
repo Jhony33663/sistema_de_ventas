@@ -5,6 +5,14 @@
  */
 package APP;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author jonad
@@ -42,18 +50,18 @@ public class LogIn extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        txt_password = new javax.swing.JPasswordField();
         btn_login = new javax.swing.JButton();
         btn_registro = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        txt_usuario = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPasswordField1.setBorder(null);
-        jPanel1.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 310, 370, 30));
+        txt_password.setBorder(null);
+        jPanel1.add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 310, 370, 30));
 
         btn_login.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/General.png"))); // NOI18N
         btn_login.addActionListener(new java.awt.event.ActionListener() {
@@ -71,9 +79,9 @@ public class LogIn extends javax.swing.JFrame {
         });
         jPanel1.add(btn_registro, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 390, 110, 70));
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField1.setBorder(null);
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 220, 370, 30));
+        txt_usuario.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txt_usuario.setBorder(null);
+        jPanel1.add(txt_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 220, 370, 30));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Desktop_-_1.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 970, 510));
@@ -94,6 +102,35 @@ public class LogIn extends javax.swing.JFrame {
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         // TODO add your handling code here:
+        if(txt_usuario.getText().length()>0 && txt_password.getText().length()>0){
+            
+            try{
+                // Conexion de base de datos
+            com.mysql.jdbc.Connection conn = (com.mysql.jdbc.Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemaventas","root","");
+                //Llegar a la tabla -->ps
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM login");
+            ResultSet rs = ps.executeQuery();
+            ResultSet r = ps.executeQuery("SELECT * FROM login where username=\""+ txt_usuario.getText() + "\" and password=\"" + txt_password.getText()+"\" ");
+            boolean found = false;
+                while (r.next()){
+                    found = true;
+                }
+                if (found){
+                    Welcome_SV welcome = new Welcome_SV();
+                    welcome.setVisible(true);
+                    this.setVisible(false);
+                }else{
+                    JOptionPane.showMessageDialog(rootPane, "ACCESO DENEGADO");
+                    JOptionPane.showMessageDialog(rootPane, "DATOS DENEGADOS");
+                }
+                
+               
+            
+            
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
         
     }//GEN-LAST:event_btn_loginActionPerformed
 
@@ -144,7 +181,7 @@ public class LogIn extends javax.swing.JFrame {
     private javax.swing.JButton btn_registro;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JPasswordField txt_password;
+    private javax.swing.JTextField txt_usuario;
     // End of variables declaration//GEN-END:variables
 }
