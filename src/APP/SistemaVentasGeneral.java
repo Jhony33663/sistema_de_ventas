@@ -46,14 +46,38 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
  */
 public class SistemaVentasGeneral extends javax.swing.JFrame {
     
-    FondoPanel fondo = new FondoPanel();
     /**
      * Creates new form SistemaVentasGeneral
      */
     public SistemaVentasGeneral() {
         initComponents();
+        transpareciabotones();
         this.setLocationRelativeTo(null);
-        this.setContentPane(fondo);
+        
+    }
+    
+    //btn_transparente
+    public void transpareciabotones(){
+        btn_clientes.setOpaque(false);
+        btn_clientes.setContentAreaFilled(false);
+        btn_clientes.setBorderPainted(false);
+        
+        btn_ventas.setOpaque(false);
+        btn_ventas.setContentAreaFilled(false);
+        btn_ventas.setBorderPainted(false);
+        
+        btn_nuevaventa.setOpaque(false);
+        btn_nuevaventa.setContentAreaFilled(false);
+        btn_nuevaventa.setBorderPainted(false);
+        
+        btn_configuracion.setOpaque(false);
+        btn_configuracion.setContentAreaFilled(false);
+        btn_configuracion.setBorderPainted(false);
+        
+        btn_salir.setOpaque(false);
+        btn_salir.setContentAreaFilled(false);
+        btn_salir.setBorderPainted(false);
+
     }
 
     /**
@@ -65,23 +89,43 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new FondoPanel();
+        jPanel2 = new javax.swing.JPanel();
+        btn_clientes = new javax.swing.JButton();
+        btn_nuevaventa = new javax.swing.JButton();
+        btn_ventas = new javax.swing.JButton();
+        btn_configuracion = new javax.swing.JButton();
+        btn_salir = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1514, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 784, Short.MAX_VALUE)
-        );
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btn_clientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cliente.png"))); // NOI18N
+        jPanel2.add(btn_clientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 210, 90));
+
+        btn_nuevaventa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/nueva_venta.png"))); // NOI18N
+        jPanel2.add(btn_nuevaventa, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 210, 90));
+
+        btn_ventas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ventas.png"))); // NOI18N
+        jPanel2.add(btn_ventas, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 210, 90));
+
+        btn_configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/configuracion.png"))); // NOI18N
+        jPanel2.add(btn_configuracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 210, 90));
+
+        btn_salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/salir.png"))); // NOI18N
+        btn_salir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_salirActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btn_salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 720, 210, 90));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Frame .png"))); // NOI18N
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -95,15 +139,20 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salirActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_btn_salirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -141,24 +190,16 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_clientes;
+    private javax.swing.JButton btn_configuracion;
+    private javax.swing.JButton btn_nuevaventa;
+    private javax.swing.JButton btn_salir;
+    private javax.swing.JButton btn_ventas;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
-    
-    class FondoPanel extends JPanel{
-        private Image imagen;
-        
-        public void paint(Graphics g){
-            
-            imagen = new ImageIcon(getClass().getResource("/Imagenes/Frame 1.png")).getImage();
-            
-            g.drawImage(imagen, 0, 0, getWidth(), getHeight(),this);
-            
-            setOpaque(false);
-            
-            super.paint(g);
-        }
-    }
+   
 }
