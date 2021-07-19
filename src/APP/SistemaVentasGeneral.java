@@ -40,12 +40,13 @@ import java.util.logging.Logger;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFRow;
+
 /**
  *
  * @author estiv
  */
 public class SistemaVentasGeneral extends javax.swing.JFrame {
-    
+
     /**
      * Creates new form SistemaVentasGeneral
      */
@@ -53,27 +54,27 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
         initComponents();
         transpareciabotones();
         this.setLocationRelativeTo(null);
-        
+
     }
-    
+
     //btn_transparente
-    public void transpareciabotones(){
+    public void transpareciabotones() {
         btn_clientes.setOpaque(false);
         btn_clientes.setContentAreaFilled(false);
         btn_clientes.setBorderPainted(false);
-        
+
         btn_ventas.setOpaque(false);
         btn_ventas.setContentAreaFilled(false);
         btn_ventas.setBorderPainted(false);
-        
+
         btn_nuevaventa.setOpaque(false);
         btn_nuevaventa.setContentAreaFilled(false);
         btn_nuevaventa.setBorderPainted(false);
-        
+
         btn_configuracion.setOpaque(false);
         btn_configuracion.setContentAreaFilled(false);
         btn_configuracion.setBorderPainted(false);
-        
+
         btn_salir.setOpaque(false);
         btn_salir.setContentAreaFilled(false);
         btn_salir.setBorderPainted(false);
@@ -90,6 +91,7 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
+        frame = new javax.swing.JDesktopPane();
         btn_clientes = new javax.swing.JButton();
         btn_nuevaventa = new javax.swing.JButton();
         btn_ventas = new javax.swing.JButton();
@@ -104,7 +106,25 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        javax.swing.GroupLayout frameLayout = new javax.swing.GroupLayout(frame);
+        frame.setLayout(frameLayout);
+        frameLayout.setHorizontalGroup(
+            frameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1210, Short.MAX_VALUE)
+        );
+        frameLayout.setVerticalGroup(
+            frameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 780, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(frame, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 40, 1210, 780));
+
         btn_clientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cliente.png"))); // NOI18N
+        btn_clientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_clientesActionPerformed(evt);
+            }
+        });
         jPanel2.add(btn_clientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 210, 90));
 
         btn_nuevaventa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/nueva_venta.png"))); // NOI18N
@@ -154,6 +174,13 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_btn_salirActionPerformed
 
+    private void btn_clientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clientesActionPerformed
+        // TODO add your handling code here:
+        Cliente ven1 = new Cliente();
+        frame.add(ven1);
+        ven1.setVisible(true);
+    }//GEN-LAST:event_btn_clientesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -195,11 +222,12 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
     private javax.swing.JButton btn_nuevaventa;
     private javax.swing.JButton btn_salir;
     private javax.swing.JButton btn_ventas;
+    private javax.swing.JDesktopPane frame;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
-   
+
 }
