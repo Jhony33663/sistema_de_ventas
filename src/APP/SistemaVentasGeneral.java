@@ -5,6 +5,7 @@
  */
 package APP;
 
+import java.awt.*;
 import com.mysql.jdbc.Connection;
 import java.awt.HeadlessException;
 import java.sql.Date;
@@ -92,32 +93,34 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
 
         jPanel2 = new javax.swing.JPanel();
         frame = new javax.swing.JDesktopPane();
+        jLabel2 = new javax.swing.JLabel();
         btn_clientes = new javax.swing.JButton();
         btn_nuevaventa = new javax.swing.JButton();
         btn_ventas = new javax.swing.JButton();
         btn_configuracion = new javax.swing.JButton();
         btn_salir = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Group 50_1.png"))); // NOI18N
+
+        frame.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         javax.swing.GroupLayout frameLayout = new javax.swing.GroupLayout(frame);
         frame.setLayout(frameLayout);
         frameLayout.setHorizontalGroup(
             frameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1210, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         frameLayout.setVerticalGroup(
             frameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 780, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jPanel2.add(frame, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 40, 1210, 780));
+        jPanel2.add(frame, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 1210, 780));
 
         btn_clientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cliente.png"))); // NOI18N
         btn_clientes.addActionListener(new java.awt.event.ActionListener() {
@@ -125,16 +128,31 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
                 btn_clientesActionPerformed(evt);
             }
         });
-        jPanel2.add(btn_clientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 210, 90));
+        jPanel2.add(btn_clientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 210, 90));
 
         btn_nuevaventa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/nueva_venta.png"))); // NOI18N
-        jPanel2.add(btn_nuevaventa, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 210, 90));
+        btn_nuevaventa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_nuevaventaActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btn_nuevaventa, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 210, 90));
 
         btn_ventas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ventas.png"))); // NOI18N
-        jPanel2.add(btn_ventas, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 210, 90));
+        btn_ventas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ventasActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btn_ventas, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, 210, 90));
 
         btn_configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/configuracion.png"))); // NOI18N
-        jPanel2.add(btn_configuracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 210, 90));
+        btn_configuracion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_configuracionActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btn_configuracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 210, 90));
 
         btn_salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/salir.png"))); // NOI18N
         btn_salir.addActionListener(new java.awt.event.ActionListener() {
@@ -145,15 +163,8 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
         jPanel2.add(btn_salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 720, 210, 90));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Frame .png"))); // NOI18N
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
+        jLabel1.setText("jLabel1");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 1490, 840));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -171,7 +182,11 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
 
     private void btn_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salirActionPerformed
         // TODO add your handling code here:
-        System.exit(0);
+        int i = JOptionPane.showConfirmDialog(null, "¿Desea salir del programa?");
+        //si
+        if (i == 0) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_btn_salirActionPerformed
 
     private void btn_clientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clientesActionPerformed
@@ -180,6 +195,39 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
         frame.add(ven1);
         ven1.setVisible(true);
     }//GEN-LAST:event_btn_clientesActionPerformed
+
+    private void btn_nuevaventaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nuevaventaActionPerformed
+        // TODO add your handling code here:
+        Ingreso_productos ing = null;
+        try {
+            ing = new Ingreso_productos();
+        } catch (SQLException ex) {
+            Logger.getLogger(SistemaVentasGeneral.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        frame.add(ing);
+        ing.setVisible(true);
+    }//GEN-LAST:event_btn_nuevaventaActionPerformed
+
+    private void btn_ventasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ventasActionPerformed
+        // TODO add your handling code here:
+        Ver_ventas ver = new Ver_ventas();
+        frame.add(ver);
+        ver.setVisible(true);
+    }//GEN-LAST:event_btn_ventasActionPerformed
+
+    private void btn_configuracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_configuracionActionPerformed
+        // TODO add your handling code here:
+        String psswd = "123";
+        String compare = JOptionPane.showInputDialog(null, "Ingrese el password", "");
+        if (compare.equals(psswd)) {
+            Config conf = new Config();
+            frame.add(conf);
+            conf.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Si no es el administrador no puede acceder", "ERROR", JOptionPane.WARNING_MESSAGE);
+
+        }
+    }//GEN-LAST:event_btn_configuracionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -224,9 +272,7 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
     private javax.swing.JButton btn_ventas;
     private javax.swing.JDesktopPane frame;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 

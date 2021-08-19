@@ -20,6 +20,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -50,7 +51,10 @@ public class Cliente extends javax.swing.JInternalFrame {
      * Creates new form Cliente
      */
     public Cliente() {
+        
         initComponents();
+        mostrardatos();
+        campos();
         transpareciabotones();
         this.table.setModel(modelo);
         this.modelo.addColumn("Cedula / Ruc");
@@ -67,6 +71,18 @@ public class Cliente extends javax.swing.JInternalFrame {
         txt_razon.setText(null);
         txt_telefono.setText(null);
     }
+    //tabla
+    public void mostrardatos() {
+        try {
+            conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/sistemaventas", "root", "");
+            String sql = "SELECT * FROM clientes";
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            table.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -79,6 +95,7 @@ public class Cliente extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        btn_refrescar = new javax.swing.JButton();
         txt_razon = new javax.swing.JTextField();
         txt_direccion = new javax.swing.JTextField();
         txt_telefono = new javax.swing.JTextField();
@@ -87,10 +104,15 @@ public class Cliente extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         btn_mostrar = new javax.swing.JToggleButton();
-        jButton1 = new javax.swing.JButton();
+        btn_actualizar = new javax.swing.JButton();
         btn_eliminar = new javax.swing.JButton();
         btn_guardar = new javax.swing.JToggleButton();
         btn_buscar = new javax.swing.JButton();
+        lbl_aviso4 = new javax.swing.JLabel();
+        lbl_aviso3 = new javax.swing.JLabel();
+        lbl_aviso2 = new javax.swing.JLabel();
+        lbl_aviso1 = new javax.swing.JLabel();
+        lbl_aviso = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -104,19 +126,27 @@ public class Cliente extends javax.swing.JInternalFrame {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        btn_refrescar.setText("Actualizar Tabla");
+        btn_refrescar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_refrescarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_refrescar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 560, 230, -1));
+
         txt_razon.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txt_razonKeyTyped(evt);
             }
         });
-        jPanel1.add(txt_razon, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 310, 240, -1));
+        jPanel1.add(txt_razon, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 360, 240, -1));
 
         txt_direccion.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txt_direccionKeyTyped(evt);
             }
         });
-        jPanel1.add(txt_direccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 250, 240, -1));
+        jPanel1.add(txt_direccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 270, 240, -1));
 
         txt_telefono.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -171,14 +201,14 @@ public class Cliente extends javax.swing.JInternalFrame {
         });
         jPanel1.add(btn_mostrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 180, 70));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/icons8_new_copy_32px.png"))); // NOI18N
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btn_actualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/icons8_new_copy_32px.png"))); // NOI18N
+        btn_actualizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_actualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_actualizarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 430, -1, -1));
+        jPanel1.add(btn_actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 430, -1, -1));
 
         btn_eliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/icons8_delete_24px.png"))); // NOI18N
         btn_eliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -198,22 +228,47 @@ public class Cliente extends javax.swing.JInternalFrame {
         });
         jPanel1.add(btn_guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 430, -1, -1));
 
-        btn_buscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/icons8_update_32px.png"))); // NOI18N
+        btn_buscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Search.png"))); // NOI18N
         btn_buscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_buscarActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 430, 60, -1));
+        jPanel1.add(btn_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 430, 60, 50));
+
+        lbl_aviso4.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
+        lbl_aviso4.setForeground(new java.awt.Color(255, 153, 51));
+        lbl_aviso4.setText("Campo obligatorio(*)");
+        jPanel1.add(lbl_aviso4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 390, 220, -1));
+
+        lbl_aviso3.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
+        lbl_aviso3.setForeground(new java.awt.Color(255, 153, 51));
+        lbl_aviso3.setText("Campo obligatorio(*)");
+        jPanel1.add(lbl_aviso3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 310, 220, -1));
+
+        lbl_aviso2.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
+        lbl_aviso2.setForeground(new java.awt.Color(255, 153, 51));
+        lbl_aviso2.setText("Campo obligatorio(*)");
+        jPanel1.add(lbl_aviso2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 220, 220, -1));
+
+        lbl_aviso1.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
+        lbl_aviso1.setForeground(new java.awt.Color(255, 153, 51));
+        lbl_aviso1.setText("Campo obligatorio(*)");
+        jPanel1.add(lbl_aviso1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 160, 220, -1));
+
+        lbl_aviso.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
+        lbl_aviso.setForeground(new java.awt.Color(255, 153, 51));
+        lbl_aviso.setText("Campo obligatorio(*)");
+        jPanel1.add(lbl_aviso, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 80, 220, -1));
 
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Razon Social");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 290, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 330, -1, -1));
 
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Dirección");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 230, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 250, -1, -1));
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Telefono");
@@ -243,46 +298,97 @@ public class Cliente extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+//etiquetas validacion de campos
+
+    public void campos() {
+        lbl_aviso.setVisible(false);
+        lbl_aviso1.setVisible(false);
+        lbl_aviso2.setVisible(false);
+        lbl_aviso3.setVisible(false);
+        lbl_aviso4.setVisible(false);
+    }
+
+    public void camposv() {
+        lbl_aviso.setVisible(true);
+        lbl_aviso1.setVisible(true);
+        lbl_aviso2.setVisible(true);
+        lbl_aviso3.setVisible(true);
+        lbl_aviso4.setVisible(true);
+    }
 
     private void txt_cedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_cedulaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_cedulaActionPerformed
 
     private void btn_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guardarActionPerformed
-        // TODO add your handling code here:
-        if (txt_cedula.getText().length() > 0 && txt_nombres.getText().length() > 0 && txt_telefono.getText().length() > 0 && txt_direccion.getText().length() > 0 && txt_razon.getText().length() > 0) {
-            this.modelo.addRow(new Object[]{this.txt_cedula.getText(), this.txt_nombres.getText(), this.txt_telefono.getText(),
-                this.txt_direccion.getText(), this.txt_razon.getText()});
-            Connection conn = null;
-            try {
-                //conexion a bd
-                conn = getConnection();
-                //datos y transformo a valores correspondientes
-                //consuta a la tabla
-                ps = conn.prepareStatement("INSERT INTO `clientes`(`dni`, `nombres`, `telefono`, `direccion`, `razon`)" + "VALUES(?,?,?,?,?)");
-                ps.setString(1, txt_cedula.getText());
-                ps.setString(2, txt_nombres.getText());
-                ps.setString(3, txt_telefono.getText());
-                ps.setString(4, txt_direccion.getText());
-                ps.setString(5, txt_razon.getText());
+        if (txt_cedula.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor verifique los campos obligatorios", "ERROR", JOptionPane.WARNING_MESSAGE);
+            lbl_aviso.setVisible(true);
+        }
+        if (txt_cedula.getText().length() == 10) {
+            int c, suma = 0, acum, resta = 0;
+            String lec;
+            lec = txt_cedula.getText();
+            String cedula = lec;
+            for (int i = 0; i < cedula.length() - 1; i++) {
+                c = Integer.parseInt(cedula.charAt(i) + "");
+                if (i % 2 == 0) {
+                    c = c * 2;
+                    if (c > 9) {
+                        c = c - 9;
+                    }
 
-                //ejecute consulta y valores
-                //execute accion de incerscion 
-                //res envia msg
-                int res = ps.executeUpdate();
-                if (res > 0) {
-                    JOptionPane.showMessageDialog(null, "Valores Almacenados");
-                    limpiarcajas();
-                } else {
-                    JOptionPane.showMessageDialog(null, "ERROR AL ALMACENAR LOS DATOS...");
-                    limpiarcajas();
                 }
-                conn.close();
-            } catch (Exception e) {
-                System.out.println(e);
+                suma = suma + c;
+            }
+            if (suma % 10 != 0) {
+                acum = ((suma / 10) + 1) * 10;
+                resta = acum - suma;
+            }
+            int ultimo = Integer.parseInt(cedula.charAt(9) + "");
+            if (ultimo == resta) {
+
+                JOptionPane.showMessageDialog(null, "CEDULA CORRECTA");
+                if (txt_nombres.getText().isEmpty() && txt_direccion.getText().isEmpty() && txt_telefono.getText().isEmpty() && txt_razon.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Por favor verifique los campos obligatorios", "ERROR", JOptionPane.WARNING_MESSAGE);
+                    camposv();
+                } else {
+                    campos();
+                    Connection conn = null;
+                    try {
+                        //conexion a bd
+                        conn = getConnection();
+                        //datos y transformo a valores correspondientes
+                        //consuta a la tabla
+                        ps = conn.prepareStatement("INSERT INTO `clientes`(`dni`, `nombres`, `telefono`, `direccion`, `razon`)" + "VALUES(?,?,?,?,?)");
+                        ps.setString(1, txt_cedula.getText());
+                        ps.setString(2, txt_nombres.getText());
+                        ps.setString(3, txt_telefono.getText());
+                        ps.setString(4, txt_direccion.getText());
+                        ps.setString(5, txt_razon.getText());
+
+                        //ejecute consulta y valores
+                        //execute accion de incerscion 
+                        //res envia msg
+                        int res = ps.executeUpdate();
+                        if (res > 0) {
+                            JOptionPane.showMessageDialog(null, "Valores Almacenados");
+                            campos();
+                            limpiarcajas();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "ERROR AL ALMACENAR LOS DATOS...");
+                            limpiarcajas();
+                        }
+                        conn.close();
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "CEDULA INCORRECTA");
             }
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Los Campos Deben Estar Llenos ...");
+            JOptionPane.showMessageDialog(null, "VERIFIQUE LOS DIGITOS DE LA CEDULA");
         }
     }//GEN-LAST:event_btn_guardarActionPerformed
 
@@ -336,12 +442,12 @@ public class Cliente extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txt_razonKeyTyped
 
-        public void transpareciabotones() {
+    public void transpareciabotones() {
         btn_mostrar.setOpaque(false);
         btn_mostrar.setContentAreaFilled(false);
         btn_mostrar.setBorderPainted(false);
-        }
-        
+    }
+
     private void btn_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscarActionPerformed
         // TODO add your handling code here:
         Connection conn = null;
@@ -364,16 +470,16 @@ public class Cliente extends javax.swing.JInternalFrame {
             conn.close();
         } catch (Exception e) {
             System.out.println(e);
-        }        
+        }
     }//GEN-LAST:event_btn_buscarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btn_actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_actualizarActionPerformed
         // TODO add your handling code here:
         Connection conn = null;
         try {
             conn = getConnection();
             ps = conn.prepareStatement("UPDATE clientes SET nombres=?, telefono=?, direccion=?, razon=? WHERE dni=?");
-            
+
             ps.setString(1, txt_nombres.getText());
             ps.setString(2, txt_telefono.getText());
             ps.setString(3, txt_direccion.getText());
@@ -390,8 +496,8 @@ public class Cliente extends javax.swing.JInternalFrame {
             conn.close();
         } catch (Exception e) {
             System.out.println(e);
-        }        
-    }//GEN-LAST:event_jButton1ActionPerformed
+        }
+    }//GEN-LAST:event_btn_actualizarActionPerformed
 
     private void btn_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminarActionPerformed
         // TODO add your handling code here:
@@ -412,23 +518,28 @@ public class Cliente extends javax.swing.JInternalFrame {
             conn.close();
         } catch (Exception e) {
             System.out.println(e);
-        }        
+        }
     }//GEN-LAST:event_btn_eliminarActionPerformed
 
     private void btn_mostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_mostrarActionPerformed
         // TODO add your handling code here:
         Imprimir_tabla framet = new Imprimir_tabla();
-        this.setVisible(false);
         framet.setVisible(true);
     }//GEN-LAST:event_btn_mostrarActionPerformed
 
+    private void btn_refrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refrescarActionPerformed
+        // TODO add your handling code here:
+        mostrardatos();
+    }//GEN-LAST:event_btn_refrescarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_actualizar;
     private javax.swing.JButton btn_buscar;
     private javax.swing.JButton btn_eliminar;
     private javax.swing.JToggleButton btn_guardar;
     private javax.swing.JToggleButton btn_mostrar;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btn_refrescar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -437,6 +548,11 @@ public class Cliente extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbl_aviso;
+    private javax.swing.JLabel lbl_aviso1;
+    private javax.swing.JLabel lbl_aviso2;
+    private javax.swing.JLabel lbl_aviso3;
+    private javax.swing.JLabel lbl_aviso4;
     private javax.swing.JTable table;
     private javax.swing.JTextField txt_cedula;
     private javax.swing.JTextField txt_direccion;

@@ -5,13 +5,17 @@
  */
 package APP;
 
+import java.awt.Graphics;
+import java.awt.Image;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -27,18 +31,19 @@ public class LogIn extends javax.swing.JFrame {
         transpareciabotones();
         this.setLocationRelativeTo(null);
     }
-    
+
     //btn_transparente
-    public void transpareciabotones(){
+    public void transpareciabotones() {
         btn_login.setOpaque(false);
         btn_login.setContentAreaFilled(false);
         btn_login.setBorderPainted(false);
 
         btn_registro.setOpaque(false);
         btn_registro.setContentAreaFilled(false);
-        btn_registro.setBorderPainted(false);        
-        
+        btn_registro.setBorderPainted(false);
+
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -50,26 +55,21 @@ public class LogIn extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        txt_password = new javax.swing.JPasswordField();
-        btn_login = new javax.swing.JButton();
-        btn_registro = new javax.swing.JButton();
         txt_usuario = new javax.swing.JTextField();
+        btn_registro = new javax.swing.JButton();
+        btn_login = new javax.swing.JButton();
+        txt_password = new javax.swing.JPasswordField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("LOGIN");
+        setResizable(false);
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        txt_password.setBorder(null);
-        jPanel1.add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 310, 370, 30));
-
-        btn_login.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/General.png"))); // NOI18N
-        btn_login.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_loginActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btn_login, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 390, 130, 70));
+        txt_usuario.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txt_usuario.setBorder(null);
+        jPanel1.add(txt_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 220, 370, 30));
 
         btn_registro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/General_1.png"))); // NOI18N
         btn_registro.addActionListener(new java.awt.event.ActionListener() {
@@ -79,11 +79,18 @@ public class LogIn extends javax.swing.JFrame {
         });
         jPanel1.add(btn_registro, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 390, 110, 70));
 
-        txt_usuario.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        txt_usuario.setBorder(null);
-        jPanel1.add(txt_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 220, 370, 30));
+        btn_login.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/General.png"))); // NOI18N
+        btn_login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_loginActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_login, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 390, 130, 70));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Desktop_-_1.png"))); // NOI18N
+        txt_password.setBorder(null);
+        jPanel1.add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 310, 370, 30));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/FrameLogin.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 970, 510));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -102,43 +109,40 @@ public class LogIn extends javax.swing.JFrame {
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         // TODO add your handling code here:
-        if(txt_usuario.getText().length()>0 && txt_password.getText().length()>0){
-            
-            try{
+        if (txt_usuario.getText().length() > 0 && txt_password.getText().length() > 0) {
+
+            try {
                 // Conexion de base de datos
-            com.mysql.jdbc.Connection conn = (com.mysql.jdbc.Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemaventas","root","");
+                com.mysql.jdbc.Connection conn = (com.mysql.jdbc.Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemaventas", "root", "");
                 //Llegar a la tabla -->ps
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM login");
-            ResultSet rs = ps.executeQuery();
-            ResultSet r = ps.executeQuery("SELECT * FROM login where username=\""+ txt_usuario.getText() + "\" and password=\"" + txt_password.getText()+"\" ");
-            boolean found = false;
-                while (r.next()){
+                PreparedStatement ps = conn.prepareStatement("SELECT * FROM login");
+                ResultSet rs = ps.executeQuery();
+                ResultSet r = ps.executeQuery("SELECT * FROM login where username=\"" + txt_usuario.getText() + "\" and password=\"" + txt_password.getText() + "\" ");
+                boolean found = false;
+                while (r.next()) {
                     found = true;
                 }
-                if (found){
+                if (found) {
                     Welcome_SV welcome = new Welcome_SV();
                     welcome.setVisible(true);
                     this.setVisible(false);
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(rootPane, "ACCESO DENEGADO");
                     JOptionPane.showMessageDialog(rootPane, "DATOS INCORRECTOS");
                 }
-                
-               
-            
-            
-            }catch(Exception e){
+
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-        }else{ 
-             JOptionPane.showMessageDialog(rootPane,"NECESITA LLENAR LOS CAMPOS");
-         }             
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "NECESITA LLENAR LOS CAMPOS");
+        }
     }//GEN-LAST:event_btn_loginActionPerformed
 
     private void btn_registroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registroActionPerformed
         // TODO add your handling code here:
-        dar_de_alta_usuario framereg = new dar_de_alta_usuario();
-        framereg.setVisible(true);
+        Verificacion ver = new Verificacion();
+        ver.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btn_registroActionPerformed
 
@@ -185,4 +189,6 @@ public class LogIn extends javax.swing.JFrame {
     private javax.swing.JPasswordField txt_password;
     private javax.swing.JTextField txt_usuario;
     // End of variables declaration//GEN-END:variables
+
+
 }
