@@ -17,13 +17,40 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
+//LIBRERIA EXCEL
+import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+
+//PASO 1 LIBERIAS
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
+import java.awt.Rectangle;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import javax.swing.RowFilter;
+import static javax.swing.UIManager.getString;
+import javax.swing.table.TableRowSorter;
+
 /**
  *
  * @author Jhony
  */
 public class Ingreso_vendedores extends javax.swing.JInternalFrame {
 
+    private TableRowSorter TRSFiltro;
+    TableRowSorter trs = null;
     DefaultTableModel modelo = new DefaultTableModel();
+    private final String ruta = System.getProperties().getProperty("user.dir");
     Connection con = null;
     public static Connection conn;
     public static final String DRIVER = "com.mysql.jdbc.Driver";
@@ -50,16 +77,55 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
         initComponents();
         ocultar();
         mostrardatos();
-        this.table.setModel(modelo);
+        transpareciabotones();
+        this.tabladatos.setModel(modelo);
         this.modelo.addColumn("id");
+        this.modelo.addColumn("Cedula");
         this.modelo.addColumn("Nombres");
-        this.modelo.addColumn("edad");
-        this.modelo.addColumn("celular");
-        this.modelo.addColumn("correo");
-        this.modelo.addColumn("direccion");
-        this.modelo.addColumn("fecha");
+        this.modelo.addColumn("Edad");
+        this.modelo.addColumn("Celular");
+        this.modelo.addColumn("Correo");
+        this.modelo.addColumn("Direccion");
+        this.modelo.addColumn("Fecha");
     }
-
+    private float empleados;
+    public void transpareciabotones() {
+        btn_guardar.setOpaque(false);
+        btn_guardar.setContentAreaFilled(false);
+        btn_guardar.setBorderPainted(false);
+        
+        btn_buscar.setOpaque(false);
+        btn_buscar.setContentAreaFilled(false);
+        btn_buscar.setBorderPainted(false);
+        
+        btn_modificar.setOpaque(false);
+        btn_modificar.setContentAreaFilled(false);
+        btn_modificar.setBorderPainted(false);
+        
+        btn_modificar.setOpaque(false);
+        btn_modificar.setContentAreaFilled(false);
+        btn_modificar.setBorderPainted(false);
+        
+        btn_eliminar.setOpaque(false);
+        btn_eliminar.setContentAreaFilled(false);
+        btn_eliminar.setBorderPainted(false);
+        
+        btn_actualizar.setOpaque(false);
+        btn_actualizar.setContentAreaFilled(false);
+        btn_actualizar.setBorderPainted(false);
+        
+        btn_back.setOpaque(false);
+        btn_back.setContentAreaFilled(false);
+        btn_back.setBorderPainted(false);
+        
+        btn_pdf.setOpaque(false);
+        btn_pdf.setContentAreaFilled(false);
+        btn_pdf.setBorderPainted(false);
+        
+        btn_excel.setOpaque(false);
+        btn_excel.setContentAreaFilled(false);
+        btn_excel.setBorderPainted(false);
+    }
 //limpiar cajas
     public void limpiarcajas() {
         txt_cedula.setText(null);
@@ -81,6 +147,13 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
         lbl_v6.setVisible(false);
 
     }
+//Filtro    
+    public void Filtro(){
+        
+        int ColumntaTabla =  1;
+        TRSFiltro.setRowFilter(RowFilter.regexFilter(txt_filtro.getText(),ColumntaTabla));
+    }
+    
 //validacion email
 
     public boolean isEmail(String correo) {
@@ -139,11 +212,11 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
     //mostrarentabla
     public void mostrardatos() {
         try {
-            conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/bdclinica", "root", "");
-            String sql = "SELECT * FROM regpacientes";
+            conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/sistemaventas", "root", "");
+            String sql = "SELECT * FROM empleados";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
-            table.setModel(DbUtils.resultSetToTableModel(rs));
+            tabladatos.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
@@ -162,7 +235,7 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
         jCalendar1 = new com.toedter.calendar.JCalendar();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
+        tabladatos = new javax.swing.JTable();
         txt_cedula = new javax.swing.JTextField();
         txt_nombres = new javax.swing.JTextField();
         txt_edad = new javax.swing.JTextField();
@@ -183,36 +256,51 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btn_actualizar = new javax.swing.JButton();
+        btn_guardar = new javax.swing.JButton();
+        btn_buscar = new javax.swing.JButton();
+        btn_modificar = new javax.swing.JButton();
+        btn_eliminar = new javax.swing.JButton();
+        btn_back = new javax.swing.JButton();
+        btn_excel = new javax.swing.JButton();
+        btn_pdf = new javax.swing.JToggleButton();
+        jLabel8 = new javax.swing.JLabel();
+        lbl_name = new javax.swing.JTextField();
+        txt_filtro = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jProgressBar1 = new javax.swing.JProgressBar();
+        jLabel11 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
 
         jButton7.setText("jButton7");
 
         setClosable(true);
         setIconifiable(true);
-        setTitle("Vendedores");
+        setTitle("VENDEDORES");
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        table.setModel(new javax.swing.table.DefaultTableModel(
+        tabladatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {},
-                {},
-                {},
-                {}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-
+                "id", "Cedula", "Nombres", "Edad", "Celular", "Correo", "Direccion", "Fecha"
             }
         ));
-        jScrollPane1.setViewportView(table);
+        tabladatos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabladatosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabladatos);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 320, 620, 130));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 370, 630, 130));
         jPanel1.add(txt_cedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 40, 150, -1));
         jPanel1.add(txt_nombres, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 120, 150, -1));
         jPanel1.add(txt_edad, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 190, 150, -1));
@@ -224,100 +312,148 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(txt_correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 40, 160, -1));
-        jPanel1.add(txt_direccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 110, 160, -1));
-        jPanel1.add(jdt, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 170, 160, -1));
+        jPanel1.add(txt_direccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 120, 160, -1));
+        jPanel1.add(jdt, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 190, 160, -1));
 
         lbl_v2.setText("CAMPO REQUERIDO (*)");
-        jPanel1.add(lbl_v2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 100, -1, -1));
+        jPanel1.add(lbl_v2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, -1, -1));
 
         lbl_v3.setText("CAMPO REQUERIDO (*)");
-        jPanel1.add(lbl_v3, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 170, -1, -1));
+        jPanel1.add(lbl_v3, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 220, -1, -1));
 
         lbl_v4.setText("CAMPO REQUERIDO (*)");
-        jPanel1.add(lbl_v4, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 240, -1, -1));
+        jPanel1.add(lbl_v4, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 290, -1, -1));
 
         lbl_v5.setText("CAMPO REQUERIDO (*)");
-        jPanel1.add(lbl_v5, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 20, -1, -1));
+        jPanel1.add(lbl_v5, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 70, -1, -1));
 
         lbl_v6.setText("CAMPO REQUERIDO (*)");
-        jPanel1.add(lbl_v6, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 90, -1, -1));
+        jPanel1.add(lbl_v6, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 150, -1, -1));
 
         lbl_v1.setText("CAMPO REQUERIDO (*)");
-        jPanel1.add(lbl_v1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, -1, -1));
+        jPanel1.add(lbl_v1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 70, -1, -1));
 
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("Direccion");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 80, -1, -1));
+        jLabel9.setText("DIRECCION");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 100, -1, -1));
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Cedula");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, -1, -1));
+        jLabel2.setText("CEDULA");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 20, -1, -1));
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Nombres");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 80, -1, -1));
+        jLabel3.setText("NOMBRES");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 100, -1, -1));
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Edad");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 160, -1, -1));
+        jLabel4.setText("EDAD");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 170, -1, -1));
 
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Celular");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 220, -1, -1));
+        jLabel5.setText("CELULAR");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 240, -1, -1));
 
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Correo Electronico");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 10, -1, -1));
+        jLabel6.setText("CORREO ELECTRONICO");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 20, -1, -1));
 
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Fecha de Nacimiento");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 150, -1, -1));
+        jLabel7.setText("FECHA DE NACIMIENTO");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 170, -1, -1));
 
-        jButton6.setText("ACTUALIZAR TABLA");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        btn_actualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/actualizar tabla.png"))); // NOI18N
+        btn_actualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                btn_actualizarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 150, -1));
+        jPanel1.add(btn_actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, 190, -1));
 
-        jButton5.setText("IMPRIMIR");
-        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 150, -1));
-
-        jButton1.setText("GUARDAR");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btn_guardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/guardar2.png"))); // NOI18N
+        btn_guardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_guardarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 150, -1));
+        jPanel1.add(btn_guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 190, -1));
 
-        jButton2.setText("BUSCAR");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btn_buscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/buscar.png"))); // NOI18N
+        btn_buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btn_buscarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 150, -1));
+        jPanel1.add(btn_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 190, -1));
 
-        jButton3.setText("MODIFICAR");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btn_modificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/modificar.png"))); // NOI18N
+        btn_modificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btn_modificarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 150, -1));
+        jPanel1.add(btn_modificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 190, -1));
 
-        jButton4.setText("ELIMINAR");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btn_eliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/eliminar2.png"))); // NOI18N
+        btn_eliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btn_eliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 150, -1));
+        jPanel1.add(btn_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 190, -1));
+
+        btn_back.setForeground(new java.awt.Color(255, 255, 255));
+        btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/REGRESAR_1.png"))); // NOI18N
+        btn_back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_backActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_back, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 190, -1));
+
+        btn_excel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Excel.png"))); // NOI18N
+        btn_excel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_excelActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_excel, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 560, -1, -1));
+
+        btn_pdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/PDF.png"))); // NOI18N
+        btn_pdf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_pdfActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_pdf, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 500, -1, -1));
+
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("ASIGNAR NOMBRE AL ARCHIVO");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 540, -1, -1));
+        jPanel1.add(lbl_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 570, 200, 30));
+
+        txt_filtro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_filtroKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txt_filtro, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 330, 180, 30));
+
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("BUSCAR POR CEDULA / RUC");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 340, -1, -1));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 320, 630, -1));
+
+        jProgressBar1.setStringPainted(true);
+        jPanel1.add(jProgressBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 620, -1, -1));
+
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/klipartz.com.png"))); // NOI18N
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, -1, -1));
+
+        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 20, 10, 280));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Frame .png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 0, 890, 460));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 0, 890, 650));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -333,7 +469,7 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btn_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminarActionPerformed
         // TODO add your handling code here:
         if (txt_cedula.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "DEBE LLENAR CEDULA PARA ELIMINAR", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -345,7 +481,7 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
                 ps.setInt(1, Integer.parseInt(txt_cedula.getText()));
                 int res = ps.executeUpdate();
                 if (res > 0) {
-                    JOptionPane.showMessageDialog(null, "Datos eliminados");
+                    JOptionPane.showMessageDialog(null, "DATOS ELIMINADOS");
                     limpiarcajas();
                 } else {
 
@@ -357,9 +493,9 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
                 System.out.println(e);
             }
         }
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btn_eliminarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btn_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guardarActionPerformed
         // TODO add your handling code here:
         validaciones();
         if (txt_cedula.getText().trim().isEmpty()) {
@@ -399,7 +535,7 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
                         conn = getConnection();
                         //datos y transformo a valores correspondientes
                         //consuta a la tabla
-                        ps = conn.prepareStatement("INSERT INTO `empleados`(`cedula`, `Nombres`, `edad`, `celular`, `correo`, `direccion`,`fecha`)" + "VALUES(?,?,?,?,?,?,?)");
+                        ps = conn.prepareStatement("INSERT INTO `empleados`(`Cedula`, `Nombres`, `Edad`, `Celular`, `Correo`, `Direccion`,`Fecha`)" + "VALUES(?,?,?,?,?,?,?)");
                         ps.setString(1, txt_cedula.getText());
                         ps.setString(2, txt_nombres.getText());
                         ps.setString(3, txt_edad.getText());
@@ -413,7 +549,7 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
                         //res envia msg
                         int res = ps.executeUpdate();
                         if (res > 0) {
-                            JOptionPane.showMessageDialog(null, "Valores Almacenados");
+                            JOptionPane.showMessageDialog(null, "VALORES ALMACENADOS");
                             limpiarcajas();
                         } else {
                             JOptionPane.showMessageDialog(null, "ERROR AL ALMACENAR LOS DATOS...");
@@ -430,7 +566,7 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
         } else {
             JOptionPane.showMessageDialog(null, "VERIFIQUE LOS DIGITOS DE LA CEDULA");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btn_guardarActionPerformed
 
     private void txt_correoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_correoFocusLost
         if (isEmail(txt_correo.getText())) {
@@ -441,23 +577,23 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
         }        // TODO add your handling code here:
     }//GEN-LAST:event_txt_correoFocusLost
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btn_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscarActionPerformed
         // TODO add your handling code here:
         validaciones();
         Connection conn = null;
         try {
             conn = getConnection();
-            ps = conn.prepareStatement("SELECT * FROM empleados WHERE cedula=?");
+            ps = conn.prepareStatement("SELECT * FROM empleados WHERE Cedula=?");
             ps.setString(1, txt_cedula.getText());
             rs = ps.executeQuery();
             if (rs.next()) {
-                txt_cedula.setText(rs.getString("cedula"));
+                txt_cedula.setText(rs.getString("Cedula"));
                 txt_nombres.setText(rs.getString("Nombres"));
-                txt_edad.setText(rs.getString("edad"));
-                txt_celular.setText(rs.getString("celular"));
-                txt_correo.setText(rs.getString("correo"));
-                txt_direccion.setText(rs.getString("direccion"));
-                String date = rs.getString("fecha");
+                txt_edad.setText(rs.getString("Edad"));
+                txt_celular.setText(rs.getString("Celular"));
+                txt_correo.setText(rs.getString("Correo"));
+                txt_direccion.setText(rs.getString("Direccion"));
+                String date = rs.getString("Fecha");
                 ((JTextField) jdt.getDateEditor().getUiComponent()).setText(date);
             } else {
                 JOptionPane.showMessageDialog(null, "No existe la cedula");
@@ -468,9 +604,9 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
         } catch (Exception e) {
             System.out.println(e);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btn_buscarActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btn_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_modificarActionPerformed
         // TODO add your handling code here:
         validaciones();
         if (txt_cedula.getText().trim().isEmpty()) {
@@ -511,7 +647,7 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
                         conn = getConnection();
                         //datos y transformo a valores correspondientes
                         //consuta a la tabla
-                        ps = conn.prepareStatement("UPDATE empleados SET Nombres=?, edad=?, celular=?, correo=?, direccion=?,fecha=? WHERE cedula=?");
+                        ps = conn.prepareStatement("UPDATE empleados SET Nombres=?, Edad=?, Celular=?, Correo=?, Direccion=?,Fecha=? WHERE Cedula=?");
 
                         ps.setString(1, txt_nombres.getText());
                         ps.setString(2, txt_edad.getText());
@@ -525,7 +661,7 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
                         //res envia msg
                         int res = ps.executeUpdate();
                         if (res > 0) {
-                            JOptionPane.showMessageDialog(null, "Valores Almacenados");
+                            JOptionPane.showMessageDialog(null, "VALORES ALMACENADOS");
                             limpiarcajas();
                         } else {
                             JOptionPane.showMessageDialog(null, "ERROR AL ALMACENAR LOS DATOS...");
@@ -543,46 +679,209 @@ public class Ingreso_vendedores extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "VERIFIQUE LOS DIGITOS DE LA CEDULA");
         }
 
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btn_modificarActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void btn_actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_actualizarActionPerformed
         // TODO add your handling code here:
         mostrardatos();
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_btn_actualizarActionPerformed
 
+    private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_btn_backActionPerformed
 
+    private void btn_excelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_excelActionPerformed
+        // TODO add your handling code here:
+        try{
+            //FileInputStream file = new FileInputStream(new File(ruta+"//Excel.xlsx"));
+            Thread t = new Thread(){
+                public void run(){
+
+                    XSSFWorkbook workbook = new XSSFWorkbook();
+                    XSSFSheet hoja = workbook.createSheet();
+
+                    XSSFRow fila = hoja.createRow(0);
+                    fila.createCell(0).setCellValue("id");
+                    fila.createCell(1).setCellValue("Cedula");
+                    fila.createCell(2).setCellValue("Nombres");
+                    fila.createCell(3).setCellValue("Edad");
+                    fila.createCell(4).setCellValue("Celular");
+                    fila.createCell(5).setCellValue("Correo");
+                    fila.createCell(6).setCellValue("Direccion");
+                    fila.createCell(7).setCellValue("Fecha");
+                    
+
+                    jProgressBar1.setMaximum(tabladatos.getRowCount());
+                    XSSFRow filas;
+                    Rectangle rect;
+                    for(int i=0; i<tabladatos.getRowCount(); i++){
+
+                        rect = tabladatos.getCellRect(i, 0 , true);
+                        try{
+                            tabladatos.scrollRectToVisible(rect);
+                        }catch(java.lang.ClassCastException e){}
+
+                        tabladatos.setRowSelectionInterval(i, i);
+
+                        jProgressBar1.setValue((i+1));
+
+                        filas = hoja.createRow((i+1));
+                        filas.createCell(0).setCellValue(tabladatos.getValueAt(i, 0).toString());
+                        filas.createCell(1).setCellValue(tabladatos.getValueAt(i, 1).toString());
+                        filas.createCell(2).setCellValue(tabladatos.getValueAt(i, 2).toString());
+                        filas.createCell(3).setCellValue(tabladatos.getValueAt(i, 3).toString());
+                        filas.createCell(4).setCellValue(tabladatos.getValueAt(i, 4).toString());
+                        filas.createCell(5).setCellValue(tabladatos.getValueAt(i, 5).toString());
+                        filas.createCell(6).setCellValue(tabladatos.getValueAt(i, 6).toString());
+                        filas.createCell(7).setCellValue(tabladatos.getValueAt(i, 7).toString());
+                        
+
+                        try{
+                            Thread.sleep(20);
+                        }catch (InterruptedException ex){
+                            Logger.getLogger(Ver_ventas.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
+                    jProgressBar1.setValue(0);
+                    jProgressBar1.setString("Abriendo Excel...");
+                    JOptionPane.showMessageDialog(null, "ARCHIVO CREADO");
+                    try{
+                        workbook.write(new FileOutputStream(new File(ruta+"//Empleados.xlsx")));
+                        Desktop.getDesktop().open(new File(ruta+"//Empleados.xlsx"));
+                    }catch(Exception ex){
+                        Logger.getLogger(Ver_ventas.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+            };
+            t.start();
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btn_excelActionPerformed
+
+    private void btn_pdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pdfActionPerformed
+        // TODO add your handling code here:
+        try {
+            generar(lbl_name.getText());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btn_pdfActionPerformed
+
+    private void tabladatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabladatosMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_tabladatosMouseClicked
+
+    private void txt_filtroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_filtroKeyTyped
+        txt_filtro.addKeyListener(new KeyAdapter(){
+
+            public void keyReleased (final KeyEvent e){
+
+                String cadena = (txt_filtro.getText());
+                txt_filtro.setText(cadena);
+                Filtro();
+            }
+        });
+        TRSFiltro = new TableRowSorter(tabladatos.getModel());
+        tabladatos.setRowSorter(TRSFiltro);
+    }//GEN-LAST:event_txt_filtroKeyTyped
+    //pdf   
+    public void generar(String nombre) throws FileNotFoundException, DocumentException {
+        FileOutputStream archivo = new FileOutputStream(nombre + ".pdf");
+        Document documento = new Document();
+        PdfWriter.getInstance(documento, archivo);
+        documento.open();
+        Paragraph parrafo = new Paragraph(empleados);
+        
+        parrafo.setAlignment(1);
+        documento.add(parrafo);
+        PdfPTable table = new PdfPTable(8);
+        table.addCell(tabladatos.getColumnName(0));
+        table.addCell(tabladatos.getColumnName(1));
+        table.addCell(tabladatos.getColumnName(2));
+        table.addCell(tabladatos.getColumnName(3));
+        table.addCell(tabladatos.getColumnName(4));
+        table.addCell(tabladatos.getColumnName(5));
+        table.addCell(tabladatos.getColumnName(6));
+        table.addCell(tabladatos.getColumnName(7));
+        
+        
+        
+        
+        try {
+            conn = getConnection();
+            ps = conn.prepareStatement("SELECT * FROM empleados");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                table.addCell(rs.getString("id"));
+                table.addCell(rs.getString("Cedula"));
+                table.addCell(rs.getString("Nombres"));
+                table.addCell(rs.getString("Edad"));
+                table.addCell(rs.getString("Celular"));
+                table.addCell(rs.getString("Correo"));
+                table.addCell(rs.getString("Direccion"));
+                table.addCell(rs.getString("Fecha"));
+                
+            }
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("ERROR" + e.getMessage());
+        }
+        
+        
+        documento.add(table);
+        documento.close();
+        JOptionPane.showMessageDialog(null, "ARCHIVO CREADO");
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton btn_actualizar;
+    private javax.swing.JButton btn_back;
+    private javax.swing.JButton btn_buscar;
+    private javax.swing.JButton btn_eliminar;
+    private javax.swing.JButton btn_excel;
+    private javax.swing.JButton btn_guardar;
+    private javax.swing.JButton btn_modificar;
+    private javax.swing.JToggleButton btn_pdf;
     private javax.swing.JButton jButton7;
     private com.toedter.calendar.JCalendar jCalendar1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private com.toedter.calendar.JDateChooser jdt;
+    private javax.swing.JTextField lbl_name;
     private javax.swing.JLabel lbl_v1;
     private javax.swing.JLabel lbl_v2;
     private javax.swing.JLabel lbl_v3;
     private javax.swing.JLabel lbl_v4;
     private javax.swing.JLabel lbl_v5;
     private javax.swing.JLabel lbl_v6;
-    private javax.swing.JTable table;
+    private javax.swing.JTable tabladatos;
     private javax.swing.JTextField txt_cedula;
     private javax.swing.JTextField txt_celular;
     private javax.swing.JTextField txt_correo;
     private javax.swing.JTextField txt_direccion;
     private javax.swing.JTextField txt_edad;
+    private javax.swing.JTextField txt_filtro;
     private javax.swing.JTextField txt_nombres;
     // End of variables declaration//GEN-END:variables
 }

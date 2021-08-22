@@ -23,6 +23,8 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -40,6 +42,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import javax.swing.RowFilter;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -48,7 +52,7 @@ import java.io.IOException;
 public class Imprimir_tabla extends javax.swing.JFrame {
 
     DefaultTableModel tdatos = new DefaultTableModel();
-
+    private TableRowSorter TRSFiltro;
     Connection con = null;
     public static Connection conn;
     public static final String DRIVER = "com.mysql.jdbc.Driver";
@@ -65,7 +69,7 @@ public class Imprimir_tabla extends javax.swing.JFrame {
         try {
             Class.forName(DRIVER);
             conn = (Connection) DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            JOptionPane.showMessageDialog(null, "Bienvenido a la consulta de datos");
+            JOptionPane.showMessageDialog(null, "BIENVENIDO A LA CONSULTA DE DATOS");
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -96,8 +100,15 @@ public class Imprimir_tabla extends javax.swing.JFrame {
         btn_excel.setOpaque(false);
         btn_excel.setContentAreaFilled(false);
         btn_excel.setBorderPainted(false);
+        
     }
-
+    
+    //Filtro    
+    public void Filtro(){
+        
+        int ColumntaTabla =  0;
+        TRSFiltro.setRowFilter(RowFilter.regexFilter(txt_filtro.getText(),ColumntaTabla));
+    }
 
     public void mostrardatos() {
         Object[] datos = new Object[10];
@@ -151,6 +162,13 @@ public class Imprimir_tabla extends javax.swing.JFrame {
         tabladatos = new javax.swing.JTable();
         lbl_name = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel3 = new javax.swing.JLabel();
+        txt_filtro = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel5 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setTitle("Imprimir");
@@ -165,16 +183,16 @@ public class Imprimir_tabla extends javax.swing.JFrame {
                 btn_excelActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_excel, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 550, -1, -1));
+        jPanel1.add(btn_excel, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 580, -1, -1));
 
         btn_back.setForeground(new java.awt.Color(255, 255, 255));
-        btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/icons8_back_to_24px.png"))); // NOI18N
+        btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/REGRESAR_1.png"))); // NOI18N
         btn_back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_backActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_back, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 500, -1, -1));
+        jPanel1.add(btn_back, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 520, -1, -1));
 
         btn_pdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/PDF.png"))); // NOI18N
         btn_pdf.addActionListener(new java.awt.event.ActionListener() {
@@ -182,11 +200,20 @@ public class Imprimir_tabla extends javax.swing.JFrame {
                 btn_pdfActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_pdf, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 450, -1, -1));
+        jPanel1.add(btn_pdf, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 520, -1, -1));
 
         tabladatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
                 "Dni / Ruc", "Nombres", "Telefono", "Direccion", "Razon Social"
@@ -194,15 +221,37 @@ public class Imprimir_tabla extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tabladatos);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 990, -1));
-        jPanel1.add(lbl_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 510, 200, -1));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 151, 990, 290));
+        jPanel1.add(lbl_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 480, 200, -1));
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("ASIGNAR NOMBRE AL ARCHIVO");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 490, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 460, -1, -1));
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/DE.png"))); // NOI18N
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 450, 260, -1));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 450, 990, -1));
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/CONSULTA DE clientes.png"))); // NOI18N
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 40, -1, -1));
+
+        txt_filtro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_filtroKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txt_filtro, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 110, 180, 30));
+
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("BUSCAR POR CEDULA / RUC");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 120, -1, -1));
+        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 970, -1));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/consulta cliente.png"))); // NOI18N
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Group 50.png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-340, 0, 1370, 610));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-340, 0, 1370, 660));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -236,6 +285,20 @@ public class Imprimir_tabla extends javax.swing.JFrame {
         // TODO add your handling code here:
         impresion();
     }//GEN-LAST:event_btn_excelActionPerformed
+
+    private void txt_filtroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_filtroKeyTyped
+        txt_filtro.addKeyListener(new KeyAdapter(){
+
+            public void keyReleased (final KeyEvent e){
+
+                String cadena = (txt_filtro.getText());
+                txt_filtro.setText(cadena);
+                Filtro();
+            }
+        });
+        TRSFiltro = new TableRowSorter(tabladatos.getModel());
+        tabladatos.setRowSorter(TRSFiltro);
+    }//GEN-LAST:event_txt_filtroKeyTyped
 
     /**
      * @param args the command line arguments
@@ -325,9 +388,16 @@ public class Imprimir_tabla extends javax.swing.JFrame {
     private javax.swing.JToggleButton btn_pdf;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField lbl_name;
     private javax.swing.JTable tabladatos;
+    private javax.swing.JTextField txt_filtro;
     // End of variables declaration//GEN-END:variables
 }

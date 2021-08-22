@@ -99,6 +99,7 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
         btn_ventas = new javax.swing.JButton();
         btn_configuracion = new javax.swing.JButton();
         btn_salir = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -160,7 +161,10 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
                 btn_salirActionPerformed(evt);
             }
         });
-        jPanel2.add(btn_salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 720, 210, 90));
+        jPanel2.add(btn_salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 730, 210, 90));
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ventas22.png"))); // NOI18N
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 490, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Frame .png"))); // NOI18N
         jLabel1.setText("jLabel1");
@@ -273,6 +277,7 @@ public class SistemaVentasGeneral extends javax.swing.JFrame {
     private javax.swing.JDesktopPane frame;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 

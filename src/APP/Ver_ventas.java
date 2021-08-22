@@ -15,19 +15,45 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import net.proteanit.sql.DbUtils;
 
+//LIBRERIA EXCEL
+import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+
+//PASO 1 LIBERIAS
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
+import java.awt.Rectangle;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import javax.swing.RowFilter;
+import static javax.swing.UIManager.getString;
+
 /**
  *
  * @author Jhony
  */
 public class Ver_ventas extends javax.swing.JInternalFrame {
+    
+    private TableRowSorter TRSFiltro;
     DefaultTableModel modelo = new DefaultTableModel();
     TableRowSorter trs;
+    private final String ruta = System.getProperties().getProperty("user.dir");
     Connection con = null;
     public static Connection conn;
     public static final String DRIVER = "com.mysql.jdbc.Driver";
     public static final String USERNAME = "root";
     public static final String PASSWORD = "";
-    public static final String URL = "jdbc:mysql://localhost:3306/bdclinica";
+    public static final String URL = "jdbc:mysql://localhost:3306/sistemaventas";
     PreparedStatement ps;
     ResultSet rs;
 
@@ -45,7 +71,9 @@ public class Ver_ventas extends javax.swing.JInternalFrame {
      */
     public Ver_ventas() {
         initComponents();
-        this.table.setModel(modelo);
+        transpareciabotones();
+        this.tabladatos.setModel(modelo);
+        this.modelo.addColumn("ID");
         this.modelo.addColumn("Cedula");
         this.modelo.addColumn("Nombres");
         this.modelo.addColumn("Cantidad");
@@ -56,7 +84,28 @@ public class Ver_ventas extends javax.swing.JInternalFrame {
         this.modelo.addColumn("Correo");
         this.modelo.addColumn("Edad");
         this.modelo.addColumn("Tipo");
-        this.modelo.addColumn("Total");        
+        this.modelo.addColumn("Vendedor");
+        this.modelo.addColumn("Total");  
+        
+    }
+    
+    private float ventas;
+    public void transpareciabotones() {
+        btn_pdf.setOpaque(false);
+        btn_pdf.setContentAreaFilled(false);
+        btn_pdf.setBorderPainted(false);
+        
+        btn_excel.setOpaque(false);
+        btn_excel.setContentAreaFilled(false);
+        btn_excel.setBorderPainted(false);
+        
+        btn_mostrar.setOpaque(false);
+        btn_mostrar.setContentAreaFilled(false);
+        btn_mostrar.setBorderPainted(false);
+        
+        btn_back.setOpaque(false);
+        btn_back.setContentAreaFilled(false);
+        btn_back.setBorderPainted(false);
     }
     public void mostrardatos() {
         try {
@@ -64,11 +113,17 @@ public class Ver_ventas extends javax.swing.JInternalFrame {
             String sql = "SELECT * FROM ventas";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
-            table.setModel(DbUtils.resultSetToTableModel(rs));
+            tabladatos.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
-    } 
+    }
+    //Filtro    
+    public void Filtro(){
+        
+        int ColumntaTabla =  1;
+        TRSFiltro.setRowFilter(RowFilter.regexFilter(txt_filtro.getText(),ColumntaTabla));
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -79,52 +134,112 @@ public class Ver_ventas extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btn_mostrar = new javax.swing.JButton();
+        btn_pdf = new javax.swing.JToggleButton();
+        btn_excel = new javax.swing.JButton();
+        lbl_name = new javax.swing.JTextField();
+        btn_back = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
+        tabladatos = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        txt_filtro = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        jProgressBar1 = new javax.swing.JProgressBar();
+        jLabel5 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
-        setTitle("Consulta Ventas");
+        setTitle("CONSULTA VENTAS");
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton2.setText("Exportar Datos");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 410, 120, -1));
-
-        jButton1.setText("Mostrar Datos");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btn_mostrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/MOSTRARDATOS.png"))); // NOI18N
+        btn_mostrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_mostrarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, -1, -1));
+        jPanel1.add(btn_mostrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 470, 210, 90));
 
-        table.setModel(new javax.swing.table.DefaultTableModel(
+        btn_pdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/PDF.png"))); // NOI18N
+        btn_pdf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_pdfActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_pdf, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 520, -1, -1));
+
+        btn_excel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Excel.png"))); // NOI18N
+        btn_excel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_excelActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_excel, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 580, -1, -1));
+        jPanel1.add(lbl_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 480, 200, 30));
+
+        btn_back.setForeground(new java.awt.Color(255, 255, 255));
+        btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/REGRESAR_1.png"))); // NOI18N
+        btn_back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_backActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_back, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 580, -1, -1));
+
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("ASIGNAR NOMBRE AL ARCHIVO");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 460, -1, -1));
+
+        tabladatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Cedula", "Nombres", "Cantidad", "Fecha", "Producto", "Precio", "Telefono", "Correo", "Edad", "Tipo", "Vendedor", "Total"
             }
         ));
-        jScrollPane1.setViewportView(table);
+        jScrollPane1.setViewportView(tabladatos);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 880, 290));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 1040, 290));
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("CONSULTA DE VENTAS");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 20, -1, -1));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/CONSULTA DE VENTAS.png"))); // NOI18N
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 50, -1, -1));
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/DE.png"))); // NOI18N
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 470, -1, -1));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 1030, 10));
+
+        txt_filtro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_filtroKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txt_filtro, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 110, 180, -1));
+
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("BUSCAR POR CEDULA / RUC");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 110, -1, 20));
+        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 1020, -1));
+
+        jProgressBar1.setStringPainted(true);
+        jPanel1.add(jProgressBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 640, -1, -1));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/consulta venta.png"))); // NOI18N
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Group 50_1.png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-320, 0, 1260, 500));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-320, 0, 1380, 680));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -140,19 +255,201 @@ public class Ver_ventas extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btn_mostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_mostrarActionPerformed
         // TODO add your handling code here:
         mostrardatos();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btn_mostrarActionPerformed
+
+    private void btn_pdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pdfActionPerformed
+        // TODO add your handling code here:
+        try {
+            generar(lbl_name.getText());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btn_pdfActionPerformed
+    
+    //pdf   
+    public void generar(String nombre) throws FileNotFoundException, DocumentException {
+        FileOutputStream archivo = new FileOutputStream(nombre + ".pdf");
+        Document documento = new Document();
+        PdfWriter.getInstance(documento, archivo);
+        documento.open();
+        Paragraph parrafo = new Paragraph(ventas);
+        
+        parrafo.setAlignment(1);
+        documento.add(parrafo);
+        PdfPTable table = new PdfPTable(13);
+        table.addCell(tabladatos.getColumnName(0));
+        table.addCell(tabladatos.getColumnName(1));
+        table.addCell(tabladatos.getColumnName(2));
+        table.addCell(tabladatos.getColumnName(3));
+        table.addCell(tabladatos.getColumnName(4));
+        table.addCell(tabladatos.getColumnName(5));
+        table.addCell(tabladatos.getColumnName(6));
+        table.addCell(tabladatos.getColumnName(7));
+        table.addCell(tabladatos.getColumnName(8));
+        table.addCell(tabladatos.getColumnName(9));
+        table.addCell(tabladatos.getColumnName(10));
+        table.addCell(tabladatos.getColumnName(11));
+        table.addCell(tabladatos.getColumnName(12));
+        
+        
+        
+        try {
+            conn = getConnection();
+            ps = conn.prepareStatement("SELECT * FROM ventas");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                table.addCell(rs.getString("ID"));
+                table.addCell(rs.getString("Cedula"));
+                table.addCell(rs.getString("Nombres"));
+                table.addCell(rs.getString("Cantidad"));
+                table.addCell(rs.getString("Fecha"));
+                table.addCell(rs.getString("Producto"));
+                table.addCell(rs.getString("Precio"));
+                table.addCell(rs.getString("Telefono"));
+                table.addCell(rs.getString("Correo"));
+                table.addCell(rs.getString("Edad"));
+                table.addCell(rs.getString("Tipo"));
+                table.addCell(rs.getString("Vendedor"));
+                table.addCell(rs.getString("Total"));
+            }
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("ERROR" + e.getMessage());
+        }
+        
+        
+        documento.add(table);
+        documento.close();
+        JOptionPane.showMessageDialog(null, "ARCHIVO CREADO");
+    }
+    private void btn_excelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_excelActionPerformed
+        // TODO add your handling code here:
+        try{
+            //FileInputStream file = new FileInputStream(new File(ruta+"//Excel.xlsx"));
+            Thread t = new Thread(){
+                public void run(){
+                    
+                    XSSFWorkbook workbook = new XSSFWorkbook();
+                    XSSFSheet hoja = workbook.createSheet();
+                    
+                    
+                    XSSFRow fila = hoja.createRow(0);
+                    fila.createCell(0).setCellValue("ID");
+                    fila.createCell(1).setCellValue("Cedula");
+                    fila.createCell(2).setCellValue("Nombres");
+                    fila.createCell(3).setCellValue("Cantidad");
+                    fila.createCell(4).setCellValue("Fecha");
+                    fila.createCell(5).setCellValue("Producto");
+                    fila.createCell(6).setCellValue("Precio");
+                    fila.createCell(7).setCellValue("Telefono");
+                    fila.createCell(8).setCellValue("Correo");
+                    fila.createCell(9).setCellValue("Edad");
+                    fila.createCell(10).setCellValue("Tipo");
+                    fila.createCell(11).setCellValue("Vendedor");
+                    fila.createCell(12).setCellValue("Total");
+                    
+                    jProgressBar1.setMaximum(tabladatos.getRowCount());
+                    XSSFRow filas;
+                    Rectangle rect;
+                    for(int i=0; i<tabladatos.getRowCount(); i++){
+                        
+                        rect = tabladatos.getCellRect(i, 0 , true);
+                        try{
+                            tabladatos.scrollRectToVisible(rect);
+                        }catch(java.lang.ClassCastException e){}
+                        
+                        tabladatos.setRowSelectionInterval(i, i);
+                        
+                        jProgressBar1.setValue((i+1));
+                        
+                        filas = hoja.createRow((i+1));
+                        filas.createCell(0).setCellValue(tabladatos.getValueAt(i, 0).toString());
+                        filas.createCell(1).setCellValue(tabladatos.getValueAt(i, 1).toString());
+                        filas.createCell(2).setCellValue(tabladatos.getValueAt(i, 2).toString());
+                        filas.createCell(3).setCellValue(tabladatos.getValueAt(i, 3).toString());
+                        filas.createCell(4).setCellValue(tabladatos.getValueAt(i, 4).toString());
+                        filas.createCell(5).setCellValue(tabladatos.getValueAt(i, 5).toString());
+                        filas.createCell(6).setCellValue(tabladatos.getValueAt(i, 6).toString());
+                        filas.createCell(7).setCellValue(tabladatos.getValueAt(i, 7).toString());
+                        filas.createCell(8).setCellValue(tabladatos.getValueAt(i, 8).toString());
+                        filas.createCell(9).setCellValue(tabladatos.getValueAt(i, 9).toString());
+                        filas.createCell(10).setCellValue(tabladatos.getValueAt(i, 10).toString());
+                        filas.createCell(11).setCellValue(tabladatos.getValueAt(i, 11).toString());
+                        filas.createCell(12).setCellValue(tabladatos.getValueAt(i, 12).toString());
+                        
+                            try{
+                               Thread.sleep(20);
+                            }catch (InterruptedException ex){
+                               Logger.getLogger(Ver_ventas.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            
+                        
+                    }
+                    jProgressBar1.setValue(0);
+                    jProgressBar1.setString("Abriendo Excel...");
+                    JOptionPane.showMessageDialog(null, "ARCHIVO CREADO");
+                    try{
+                        workbook.write(new FileOutputStream(new File(ruta+"//Ventas.xlsx")));
+                        Desktop.getDesktop().open(new File(ruta+"//Ventas.xlsx"));
+                    }catch(Exception ex){
+                          Logger.getLogger(Ver_ventas.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                }
+            };
+            t.start();
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btn_excelActionPerformed
+
+    private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_btn_backActionPerformed
+
+    private void txt_filtroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_filtroKeyTyped
+        txt_filtro.addKeyListener(new KeyAdapter(){
+
+            public void keyReleased (final KeyEvent e){
+
+                String cadena = (txt_filtro.getText());
+                txt_filtro.setText(cadena);
+                Filtro();
+            }
+        });
+        TRSFiltro = new TableRowSorter(tabladatos.getModel());
+        tabladatos.setRowSorter(TRSFiltro);
+    }//GEN-LAST:event_txt_filtroKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btn_back;
+    private javax.swing.JButton btn_excel;
+    private javax.swing.JButton btn_mostrar;
+    private javax.swing.JToggleButton btn_pdf;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable table;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTextField lbl_name;
+    private javax.swing.JTable tabladatos;
+    private javax.swing.JTextField txt_filtro;
     // End of variables declaration//GEN-END:variables
+
+    private void btn_excel(String text) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

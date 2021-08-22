@@ -18,8 +18,12 @@ import javax.swing.JRadioButton;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.RowFilter;
+import javax.swing.table.TableRowSorter;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -27,7 +31,9 @@ import net.proteanit.sql.DbUtils;
  * @author jonad
  */
 public class Cliente extends javax.swing.JInternalFrame {
-
+    
+    private TableRowSorter TRSFiltro;
+    TableRowSorter trs = null;
     Connection con = null;
     public static Connection conn;
     public static final String DRIVER = "com.mysql.jdbc.Driver";
@@ -118,21 +124,29 @@ public class Cliente extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        btn_back = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        txt_filtro = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
-        setTitle("Cliente");
+        setTitle("CLIENTE");
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btn_refrescar.setText("Actualizar Tabla");
+        btn_refrescar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/actualizar tabla.png"))); // NOI18N
         btn_refrescar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_refrescarActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_refrescar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 560, 230, -1));
+        jPanel1.add(btn_refrescar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 660, 200, -1));
 
         txt_razon.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -191,7 +205,7 @@ public class Cliente extends javax.swing.JInternalFrame {
             table.getColumnModel().getColumn(4).setPreferredWidth(80);
         }
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 50, 570, 590));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 140, 570, 550));
 
         btn_mostrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Group 49.png"))); // NOI18N
         btn_mostrar.addActionListener(new java.awt.event.ActionListener() {
@@ -199,43 +213,43 @@ public class Cliente extends javax.swing.JInternalFrame {
                 btn_mostrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_mostrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 180, 70));
+        jPanel1.add(btn_mostrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 190, 70));
 
-        btn_actualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/icons8_new_copy_32px.png"))); // NOI18N
+        btn_actualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/actualizar.png"))); // NOI18N
         btn_actualizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_actualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_actualizarActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 430, -1, -1));
+        jPanel1.add(btn_actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 480, 180, -1));
 
-        btn_eliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/icons8_delete_24px.png"))); // NOI18N
+        btn_eliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/eliminar.png"))); // NOI18N
         btn_eliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_eliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_eliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 500, 230, 40));
+        jPanel1.add(btn_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 600, 180, 50));
 
-        btn_guardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/save_32px.png"))); // NOI18N
+        btn_guardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/guardar.png"))); // NOI18N
         btn_guardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_guardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_guardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 430, -1, -1));
+        jPanel1.add(btn_guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 540, 180, -1));
 
-        btn_buscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Search.png"))); // NOI18N
+        btn_buscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/buscar.png"))); // NOI18N
         btn_buscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_buscarActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 430, 60, 50));
+        jPanel1.add(btn_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 420, 180, 50));
 
         lbl_aviso4.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
         lbl_aviso4.setForeground(new java.awt.Color(255, 153, 51));
@@ -282,8 +296,41 @@ public class Cliente extends javax.swing.JInternalFrame {
         jLabel3.setText("Cedula / Ruc");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 30, -1, -1));
 
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/XD.png"))); // NOI18N
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 470, 220, -1));
+
+        btn_back.setForeground(new java.awt.Color(255, 255, 255));
+        btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/REGRESAR_1.png"))); // NOI18N
+        btn_back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_backActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_back, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
+
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/CLIENT1.png"))); // NOI18N
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 30, -1, 40));
+
+        txt_filtro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_filtroKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txt_filtro, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 94, 180, 30));
+
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("BUSCAR POR CEDULA / RUC");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 100, -1, -1));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 80, 570, -1));
+
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/kliente.png"))); // NOI18N
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, -1));
+
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cliente22.png"))); // NOI18N
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 20, -1, -1));
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Frame 1.png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 1100, 670));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 1100, 720));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -293,7 +340,7 @@ public class Cliente extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -315,7 +362,13 @@ public class Cliente extends javax.swing.JInternalFrame {
         lbl_aviso3.setVisible(true);
         lbl_aviso4.setVisible(true);
     }
-
+//Filtro    
+    public void Filtro(){
+        
+        int ColumntaTabla =  0;
+        TRSFiltro.setRowFilter(RowFilter.regexFilter(txt_filtro.getText(),ColumntaTabla));
+    }
+    
     private void txt_cedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_cedulaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_cedulaActionPerformed
@@ -360,7 +413,7 @@ public class Cliente extends javax.swing.JInternalFrame {
                         conn = getConnection();
                         //datos y transformo a valores correspondientes
                         //consuta a la tabla
-                        ps = conn.prepareStatement("INSERT INTO `clientes`(`dni`, `nombres`, `telefono`, `direccion`, `razon`)" + "VALUES(?,?,?,?,?)");
+                        ps = conn.prepareStatement("INSERT INTO `clientes`(`dni`, `Nombres`, `Telefono`, `Direccion`, `Razon`)" + "VALUES(?,?,?,?,?)");
                         ps.setString(1, txt_cedula.getText());
                         ps.setString(2, txt_nombres.getText());
                         ps.setString(3, txt_telefono.getText());
@@ -372,7 +425,7 @@ public class Cliente extends javax.swing.JInternalFrame {
                         //res envia msg
                         int res = ps.executeUpdate();
                         if (res > 0) {
-                            JOptionPane.showMessageDialog(null, "Valores Almacenados");
+                            JOptionPane.showMessageDialog(null, "VALORES ALMACENADOS");
                             campos();
                             limpiarcajas();
                         } else {
@@ -446,6 +499,30 @@ public class Cliente extends javax.swing.JInternalFrame {
         btn_mostrar.setOpaque(false);
         btn_mostrar.setContentAreaFilled(false);
         btn_mostrar.setBorderPainted(false);
+        
+        btn_back.setOpaque(false);
+        btn_back.setContentAreaFilled(false);
+        btn_back.setBorderPainted(false);
+        
+        btn_buscar.setOpaque(false);
+        btn_buscar.setContentAreaFilled(false);
+        btn_buscar.setBorderPainted(false);
+        
+        btn_actualizar.setOpaque(false);
+        btn_actualizar.setContentAreaFilled(false);
+        btn_actualizar.setBorderPainted(false);
+        
+        btn_guardar.setOpaque(false);
+        btn_guardar.setContentAreaFilled(false);
+        btn_guardar.setBorderPainted(false);
+        
+        btn_eliminar.setOpaque(false);
+        btn_eliminar.setContentAreaFilled(false);
+        btn_eliminar.setBorderPainted(false);
+        
+        btn_refrescar.setOpaque(false);
+        btn_refrescar.setContentAreaFilled(false);
+        btn_refrescar.setBorderPainted(false);
     }
 
     private void btn_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscarActionPerformed
@@ -458,12 +535,12 @@ public class Cliente extends javax.swing.JInternalFrame {
             rs = ps.executeQuery();
             if (rs.next()) {
                 txt_cedula.setText(rs.getString("dni"));
-                txt_nombres.setText(rs.getString("nombres"));
-                txt_telefono.setText(rs.getString("telefono"));
-                txt_direccion.setText(rs.getString("direccion"));
-                txt_razon.setText(rs.getString("razon"));
+                txt_nombres.setText(rs.getString("Nombres"));
+                txt_telefono.setText(rs.getString("Telefono"));
+                txt_direccion.setText(rs.getString("Direccion"));
+                txt_razon.setText(rs.getString("Razon"));
             } else {
-                JOptionPane.showMessageDialog(null, "No existe el numero de cedula");
+                JOptionPane.showMessageDialog(null, "NO EXISTE EL NUMERO DE CEDULA");
                 limpiarcajas();
             }
 
@@ -487,7 +564,7 @@ public class Cliente extends javax.swing.JInternalFrame {
             ps.setString(5, txt_cedula.getText());
             int res = ps.executeUpdate();
             if (res > 0) {
-                JOptionPane.showMessageDialog(null, "Valores Actualizados con exito");
+                JOptionPane.showMessageDialog(null, "VALORES ACTUALIZADOS CON EXITO");
                 limpiarcajas();
             } else {
                 JOptionPane.showMessageDialog(null, "ERROR VERIFIQUE LOS CAMPOS AL ACTUALIZAR");
@@ -508,7 +585,7 @@ public class Cliente extends javax.swing.JInternalFrame {
             ps.setInt(1, Integer.parseInt(txt_cedula.getText()));
             int res = ps.executeUpdate();
             if (res > 0) {
-                JOptionPane.showMessageDialog(null, "Datos eliminados");
+                JOptionPane.showMessageDialog(null, "DATOS ELIMINADOS");
                 limpiarcajas();
             } else {
 
@@ -532,22 +609,48 @@ public class Cliente extends javax.swing.JInternalFrame {
         mostrardatos();
     }//GEN-LAST:event_btn_refrescarActionPerformed
 
+    private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_btn_backActionPerformed
+
+    private void txt_filtroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_filtroKeyTyped
+        txt_filtro.addKeyListener(new KeyAdapter(){
+            
+            public void keyReleased (final KeyEvent e){
+                
+                String cadena = (txt_filtro.getText());
+                txt_filtro.setText(cadena);
+                Filtro();
+            }
+        });
+        TRSFiltro = new TableRowSorter(table.getModel());
+        table.setRowSorter(TRSFiltro);
+    }//GEN-LAST:event_txt_filtroKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_actualizar;
+    private javax.swing.JButton btn_back;
     private javax.swing.JButton btn_buscar;
     private javax.swing.JButton btn_eliminar;
     private javax.swing.JToggleButton btn_guardar;
     private javax.swing.JToggleButton btn_mostrar;
     private javax.swing.JButton btn_refrescar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lbl_aviso;
     private javax.swing.JLabel lbl_aviso1;
     private javax.swing.JLabel lbl_aviso2;
@@ -556,6 +659,7 @@ public class Cliente extends javax.swing.JInternalFrame {
     private javax.swing.JTable table;
     private javax.swing.JTextField txt_cedula;
     private javax.swing.JTextField txt_direccion;
+    private javax.swing.JTextField txt_filtro;
     private javax.swing.JTextField txt_nombres;
     private javax.swing.JTextField txt_razon;
     private javax.swing.JTextField txt_telefono;
